@@ -1,0 +1,3 @@
+[submodule "covapp"]
+	path = covapp
+	url = https://github.com/d4l-data4life/covapp
