@@ -68,7 +68,10 @@ def get_next_question(user_id, lang, next_question_id="P0"):
                 next_question_id = get_question_id_from_index(index + 1)
                 question = InternQuestion(next_question_id, **get_question(next_question_id))
         if old_question.score:
-            if old_question.score[next_question_id] > 0:
+            if next_question_id not in old_question.score:
+                # this might happen in some weird access way, not able to fix it, its an issue with upstream code
+                pass
+            elif old_question.score[next_question_id] > 0:
                 if old_question.category in cache[user_id]:
                     cache[user_id][old_question.category] += old_question.score[next_question_id]
                 else:
