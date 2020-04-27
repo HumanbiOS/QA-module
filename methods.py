@@ -1,4 +1,4 @@
-import setup
+from .setup import languages, get_question, get_question_index, get_question_id_from_index
 
 cache = {}
 
@@ -38,7 +38,7 @@ class ExternQuestion:
         self.multi = multi
 
     def _get_string(self, string):
-        return setup.languages[self._lang][string]
+        return languages[self._lang][string]
 
     def __repr__(self):
         tmp = dict()
@@ -48,9 +48,9 @@ class ExternQuestion:
 
 
 def get_next_question(user_id, lang, next_question_id="P0"):
-    if not setup.get_question(next_question_id):
+    if not get_question(next_question_id):
         return False
-    question = InternQuestion(next_question_id, **setup.get_question(next_question_id))
+    question = InternQuestion(next_question_id, **get_question(next_question_id))
     if user_id in cache:
         old_question = cache[user_id]["question"]
         if old_question.guard:
@@ -64,9 +64,9 @@ def get_next_question(user_id, lang, next_question_id="P0"):
                         fail = True
                         break
             if fail:
-                index = setup.get_question_index(old_question.question_id)
-                next_question_id = setup.get_question_id_from_index(index + 1)
-                question = InternQuestion(next_question_id, **setup.get_question(next_question_id))
+                index = get_question_index(old_question.question_id)
+                next_question_id = get_question_id_from_index(index + 1)
+                question = InternQuestion(next_question_id, **get_question(next_question_id))
         if old_question.score:
             if old_question.score[next_question_id] > 0:
                 if old_question.category in cache[user_id]:
@@ -76,4 +76,4 @@ def get_next_question(user_id, lang, next_question_id="P0"):
         cache[user_id]["question"] = question
     else:
         cache[user_id] = {"question": question}
-    return ExternQuestion(lang, next_question_id, **setup.get_question(next_question_id))
+    return ExternQuestion(lang, next_question_id, **get_question(next_question_id))
