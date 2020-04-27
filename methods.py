@@ -76,7 +76,3 @@ def get_next_question(user_id, lang, next_question_id="P0"):
     else:
         cache[user_id] = {"question": question}
     return ExternQuestion(lang, **setup.questions[next_question_id])
-
-
-def get_intern(next_question_id):
-    return InternQuestion(**setup.get_question(next_question_id))

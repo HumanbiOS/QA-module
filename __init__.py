@@ -1,3 +1,3 @@
-import methods
+from .methods import get_next_question
 
-__all__ = ["methods"]
+__all__ = ["get_next_question"]
