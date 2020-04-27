@@ -18,8 +18,9 @@ class InternQuestion:
 
 
 class ExternQuestion:
-    def __init__(self, lang, text, answers, comment=False, multi=False, **kwargs):
+    def __init__(self, lang, question_id, text, answers, comment=False, multi=False, **kwargs):
         self._lang = lang
+        self.id = question_id
         self.text = self._get_string(text)
         if comment:
             self.comment = self._get_string(comment)
@@ -75,4 +76,4 @@ def get_next_question(user_id, lang, next_question_id="P0"):
         cache[user_id]["question"] = question
     else:
         cache[user_id] = {"question": question}
-    return ExternQuestion(lang, **setup.questions[next_question_id])
+    return ExternQuestion(lang, next_question_id, **setup.get_question(next_question_id))
