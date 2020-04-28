@@ -53,20 +53,6 @@ def get_next_question(user_id, lang, next_question_id="P0"):
     question = InternQuestion(next_question_id, **get_question(next_question_id))
     if user_id in cache:
         old_question = cache[user_id]["question"]
-        if old_question.guard:
-            fail = False
-            for test in old_question.guard:
-                if test["category"] not in cache[user_id]:
-                    fail = True
-                    break
-                else:
-                    if cache[user_id][test["category"]] < test["min"]:
-                        fail = True
-                        break
-            if fail:
-                index = get_question_index(old_question.question_id)
-                next_question_id = get_question_id_from_index(index + 1)
-                question = InternQuestion(next_question_id, **get_question(next_question_id))
         if old_question.score:
             if next_question_id not in old_question.score:
                 # this might happen in some weird access way, not able to fix it, its an issue with upstream code
@@ -79,4 +65,19 @@ def get_next_question(user_id, lang, next_question_id="P0"):
         cache[user_id]["question"] = question
     else:
         cache[user_id] = {"question": question}
+    if question.guard:
+        fail = False
+        for test in question.guard:
+            if test["category"] not in cache[user_id]:
+                fail = True
+                break
+            else:
+                if cache[user_id][test["category"]] < test["min"]:
+                    fail = True
+                    break
+        if fail:
+            index = get_question_index(question.question_id)
+            next_question_id = get_question_id_from_index(index + 1)
+            question = InternQuestion(next_question_id, **get_question(next_question_id))
+            cache[user_id]["question"] = question
     return ExternQuestion(lang, next_question_id, **get_question(next_question_id))
