@@ -1,3 +1,6 @@
+import json
+import os
+
 from .setup import languages, get_question, get_question_index, get_question_id_from_index
 
 cache = {}
@@ -8,7 +11,8 @@ class InternQuestion:
         self.question_id = question_id
         self.score = score
         self.category = category
-        self.guard = guard
+        if not guard:
+            self.guard = []
 
     def __repr__(self):
         tmp = dict()
@@ -81,3 +85,12 @@ def get_next_question(user_id, lang, next_question_id="P0"):
             question = InternQuestion(next_question_id, **get_question(next_question_id))
             cache[user_id]["question"] = question
     return ExternQuestion(lang, next_question_id, **get_question(next_question_id))
+
+
+def get_english_strings():
+    return languages["en"]
+
+
+def put_translated_strings(language_code, language_dict):
+    languages[language_code] = language_dict
+    json.dump(languages, open(os.path.dirname(os.path.abspath(__file__)) + "/strings.json", "w"), indent=4)
