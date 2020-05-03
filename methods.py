@@ -7,12 +7,13 @@ cache = {}
 
 
 class InternQuestion:
-    def __init__(self, question_id, score=False, category=False, guard=False, **kwargs):
+    def __init__(self, question_id, score=False, category=False, guard=None, **kwargs):
+        if guard is None:
+            guard = []
+        self.guard = guard
         self.question_id = question_id
         self.score = score
         self.category = category
-        if not guard:
-            self.guard = []
 
     def __repr__(self):
         tmp = dict()
