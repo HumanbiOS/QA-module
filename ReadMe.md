@@ -4,6 +4,8 @@ Pretty easy. Import `get_next_question` from `methods`. Pass a unique user_id, l
 
 In the end, return the new question id alongside the other variables. For the multi questions, pick the last answer/question id you get. If the returned value is False, you have reached the end.
 
+`get_user_score` returns a score dict, mapping the category to the score. If a category isn't in there, the user has no score in it. All categories are `contact, symptoms, medication, illnesses, respiratorySymptoms`
+
 Development
 
 make sure that you initialized the submodule, then you need to run `npm ci` from inside the covapp directory to install the dependencies. Then run `npm start` which copies the rest of the modules. Once its running, abort it. From there, run `tsc covapp/src/global/questions.ts 
