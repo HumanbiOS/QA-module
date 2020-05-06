@@ -63,21 +63,21 @@ def get_next_question(user_id, lang, next_question_id="P0"):
                 # this might happen in some weird access way, not able to fix it, its an issue with upstream code
                 pass
             elif old_question.score[next_question_id] > 0:
-                if old_question.category in cache[user_id]:
-                    cache[user_id][old_question.category] += old_question.score[next_question_id]
+                if old_question.category in cache[user_id]["scores"]:
+                    cache[user_id]["scores"][old_question.category] += old_question.score[next_question_id]
                 else:
-                    cache[user_id][old_question.category] = old_question.score[next_question_id]
+                    cache[user_id]["scores"][old_question.category] = old_question.score[next_question_id]
         cache[user_id]["question"] = question
     else:
-        cache[user_id] = {"question": question}
+        cache[user_id] = {"question": question, "scores": {}}
     if question.guard:
         fail = False
         for test in question.guard:
-            if test["category"] not in cache[user_id]:
+            if test["category"] not in cache[user_id]["scores"]:
                 fail = True
                 break
             else:
-                if cache[user_id][test["category"]] < test["min"]:
+                if cache[user_id]["scores"][test["category"]] < test["min"]:
                     fail = True
                     break
         if fail:
@@ -95,3 +95,7 @@ def get_english_strings():
 def put_translated_strings(language_code, language_dict):
     languages[language_code] = language_dict
     json.dump(languages, open(os.path.dirname(os.path.abspath(__file__)) + "/strings.json", "w"), indent=4)
+
+
+def get_user_scores(user_id):
+    return cache[user_id]["scores"]
