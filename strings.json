@@ -72,7 +72,10 @@
         "q_X1_comment": "[TRANSLATION/CONTENT needed for translation key: q_X1_comment]",
         "q_X1_option0": "[TRANSLATION/CONTENT needed for translation key: q_X1_option0]",
         "q_X1_option1": "[TRANSLATION/CONTENT needed for translation key: q_X1_option1]",
-        "q_X1_text": "[TRANSLATION/CONTENT needed for translation key: q_X1_text]"
+        "q_X1_text": "[TRANSLATION/CONTENT needed for translation key: q_X1_text]",
+        "recommendation_0": "Get in touch\n\nThe recommendation based on your answers is to go see a doctor.",
+        "recommendation_1": "Please take care of yourself at home.\n\nStay safe, watch that coughing, and get better. If you don't, seeing a doctor is a good idea.",
+        "recommendation_2": "Please stay at home and follow the general hygiene recommendations.\n\nNo further thread from you."
     },
     "de": {
         "answer_no": "Nein",

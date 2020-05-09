@@ -48,6 +48,12 @@ for index, question in enumerate(actual_order):
         temp_dict["comment"] = question["comment"]
     if "scoreMap" in question:
         temp_dict.update({"score": {}, "category": question["category"]})
+        testval = list(temp_dict["answers"].values())[0]
+        if all(val == testval for val in temp_dict["answers"].values()):
+            x = 0
+            for answ in temp_dict["answers"]:
+                temp_dict["answers"][answ] = temp_dict["answers"][answ] + str(x)
+                x += 1
         for answer_id, score in enumerate(question["scoreMap"]):
             try:
                 temp_dict["score"][temp_dict["answers"][question["options"][answer_id]]] = score
