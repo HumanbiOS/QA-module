@@ -1,7 +1,7 @@
 import json
 import os
 
-from setup import languages, get_question, get_question_index, get_question_id_from_index
+from .setup import languages, get_question, get_question_index, get_question_id_from_index
 
 cache = {}
 
