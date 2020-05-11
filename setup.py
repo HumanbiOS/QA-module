@@ -42,6 +42,9 @@ for index, question in enumerate(actual_order):
             temp_dict["multi"] = True
             for answer in question["options"]:
                 temp_dict["answers"][answer["label"]] = answer["id"]
+            # we add this answer to satisfy the only multi question we have so far. might need to be changed
+            # to X0 specific, I hate doing hacky stuff like this
+            temp_dict["answers"]["questionnaire_button_next"] = answer["id"]
     else:
         temp_dict["answers"]["free"] = actual_order[index + 1]["id"]
     if "comment" in question and question["comment"] is not None:

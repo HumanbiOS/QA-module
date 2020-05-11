@@ -10,9 +10,13 @@ for _file_name in os.listdir(folder_path):
 # now we have to extract the questions and answers in an easier format for us. First we gather all unused keys
 keys_to_delete = []
 for key in languages["en"]:
+    # all keys not starting with a q_ are not questions
     if not key.startswith("q_"):
+        # and we need to include the answers
         if not key.startswith("answer_"):
-            keys_to_delete.append(key)
+            # and we need the next key
+            if key != "questionnaire_button_next":
+                keys_to_delete.append(key)
 # then we delete them from the dictionaries
 for language in languages:
     for key in keys_to_delete:
