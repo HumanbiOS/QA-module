@@ -88,16 +88,7 @@ def get_next_question(user_id, lang, next_question_id="P0"):
     else:
         cache[user_id] = {"question": question, "scores": {}}
     if question.guard:
-        fail = False
-        for test in question.guard:
-            if test["category"] not in cache[user_id]["scores"]:
-                fail = True
-                break
-            else:
-                if cache[user_id]["scores"][test["category"]] < test["min"]:
-                    fail = True
-                    break
-        if fail:
+        if not _test_question(question, user_id):
             index = get_question_index(question.question_id)
             next_question_id = get_question_id_from_index(index + 1)
             question = InternQuestion(next_question_id, **get_question(next_question_id))
@@ -116,3 +107,26 @@ def put_translated_strings(language_code, language_dict):
 
 def get_user_scores(user_id):
     return cache[user_id]["scores"]
+
+
+def get_previous_question(user_id, lang, question_id):
+    index = get_question_index(question_id)
+    previous_question_id = get_question_id_from_index(index - 1)
+    question = InternQuestion(previous_question_id, **get_question(previous_question_id))
+    if question.guard:
+        if not _test_question(question, user_id):
+            index = get_question_index(question.question_id)
+            previous_question_id = get_question_id_from_index(index - 1)
+            question = InternQuestion(previous_question_id, **get_question(previous_question_id))
+            cache[user_id]["question"] = question
+    return ExternQuestion(lang, previous_question_id, **get_question(previous_question_id))
+
+
+def _test_question(question, user_id):
+    for test in question.guard:
+        if test["category"] not in cache[user_id]["scores"]:
+            return False
+        else:
+            if cache[user_id]["scores"][test["category"]] < test["min"]:
+                return False
+    return True
