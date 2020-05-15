@@ -85,8 +85,10 @@ def get_next_question(user_id, lang, next_question_id="P0"):
                 else:
                     cache[user_id]["scores"][old_question.category] = old_question.score[specific]
         cache[user_id]["question"] = question
+        if next_question_id not in cache[user_id]["answers"]:
+            cache[user_id]["answers"].append(next_question_id)
     else:
-        cache[user_id] = {"question": question, "scores": {}}
+        cache[user_id] = {"question": question, "scores": {}, "answers": [next_question_id]}
     if question.guard:
         if not _test_question(question, user_id):
             index = get_question_index(question.question_id)
@@ -110,10 +112,17 @@ def get_user_scores(user_id):
 
 
 def get_previous_question(user_id, lang, question_id):
-    index = get_question_index(question_id)
-    if index == 0:
-        return None
-    previous_question_id = get_question_id_from_index(index - 1)
+    if user_id not in cache:
+        return False
+    if question_id not in cache[user_id]["answers"]:
+        return False
+    # theoretically not needed since I test above, but PyCharm doesnt get it
+    previous_question_id = False
+    for index, q_id in enumerate(cache[user_id]["answers"]):
+        if q_id == question_id:
+            if index == 0:
+                return False
+            previous_question_id = cache[user_id]["answers"][index - 1]
     question = InternQuestion(previous_question_id, **get_question(previous_question_id))
     if question.guard:
         if not _test_question(question, user_id):
