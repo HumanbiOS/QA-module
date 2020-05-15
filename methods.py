@@ -111,9 +111,9 @@ def get_user_scores(user_id):
 
 def get_previous_question(user_id, lang, question_id):
     index = get_question_index(question_id)
-    previous_question_id = get_question_id_from_index(index - 1)
-    if not previous_question_id:
+    if index == 0:
         return None
+    previous_question_id = get_question_id_from_index(index - 1)
     question = InternQuestion(previous_question_id, **get_question(previous_question_id))
     if question.guard:
         if not _test_question(question, user_id):
