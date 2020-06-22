@@ -1,6 +1,3 @@
-import json
-import os
-
 from .setup import languages, get_question, get_question_index, get_question_id_from_index
 
 cache = {}
@@ -56,7 +53,9 @@ class ExternQuestion:
         return str(tmp)
 
 
-def get_next_question(user_id, lang, next_question_id="P0"):
+def get_next_question(user_id, lang, next_question_id="P0", strings=None):
+    if strings:
+        put_translated_strings(lang, strings)
     if len(next_question_id) == 3:
         specific = next_question_id
         next_question_id = next_question_id[:2]
@@ -103,15 +102,18 @@ def get_english_strings():
 
 
 def put_translated_strings(language_code, language_dict):
-    languages[language_code] = language_dict
-    json.dump(languages, open(os.path.dirname(os.path.abspath(__file__)) + "/strings.json", "w"), indent=4)
+    # only replace new ones
+    for key in language_dict:
+        languages[language_code][key] = language_dict[key]
 
 
 def get_user_scores(user_id):
     return cache[user_id]["scores"]
 
 
-def get_previous_question(user_id, lang, question_id):
+def get_previous_question(user_id, lang, question_id, strings=None):
+    if strings:
+        put_translated_strings(lang, strings)
     if user_id not in cache:
         return False
     if question_id not in cache[user_id]["answers"]:
